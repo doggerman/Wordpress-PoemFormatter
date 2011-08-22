@@ -4,7 +4,7 @@ Contributors: wwerther
 Donate link: http://wwerther.de/
 Tags: poem, formatter
 Requires at least: 3.2
-Tested up to: 3.1.2
+Tested up to: 3.2.2
 Stable tag: 0.0.6
 
 A plugin that allows to format poems in a proper and easy way. It provides some small control tags to allow adjustment to the layout.
@@ -32,20 +32,26 @@ has to be explained and written. Job is on my ToDo-list.
 
 1. Download the Plugin ZIP file
 1. Unpack the Plugin-ZIP
-1. Upload the gpx2chart folder to your wordpress plugin directory
+1. Upload the poem\_formatter folder to your wordpress plugin directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
-After activating the plugin you can use Poem FGPX2Chart with these shortcode:
+After activating the plugin you can use Poem Formatter with these shortcode:
 
-* \[poem title="\<Title\>" \]Your poem here\[/poem\]
+* \[poem title="\<Name of your poem\>"\]Your poem here\[/poem\]
 
 Optional parameters are
 poem title="title" (debug) (align="center|left|right") (indent="<pixel>")
 
 * title="title" \-\> specify the title of your poem
+* author \-\> Specify the author of the poem.
+* date \-\> Specify the creation date of the poem (if you want to)
 * align="center|left|right" \-\> default is center, specify the default align of the poem lines (can be changed during the poem)
 * indent = "pixel" default is 50, specifies the indent per line in pixel per + sign at the start of the line
+* template \-\> The name of the template that shall be used for the poem. If not specified "default" is loaded
 * debug \-\> If this is present the PHP-module put some more information into the HTML-file
+* ipsum \-\> If this is present the content will be replaced by "Lorem Ipsum"
+* titlecolor \-\> If the template supports changing the title-color this can be done with this switch
+* textcolor \-\> If the template supports changing the text-color this can be done with this switch
 
 ## Frequently Asked Questions ##
 
@@ -64,6 +70,7 @@ Yes, I'm sure, that there are some known bugs. I had no time to fix or trace the
 Yes, there is kind of a roadmap. But the order depends on my time.
 
 * improve the documentation
+* add screenshots
 * create some more templates
 
 ## Screenshots ##
