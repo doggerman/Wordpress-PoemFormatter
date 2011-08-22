@@ -5,7 +5,7 @@ Donate link: http://wwerther.de/
 Tags: poem, formatter
 Requires at least: 3.2
 Tested up to: 3.1.2
-Stable tag: 0.0.4
+Stable tag: 0.0.6
 
 A plugin that allows to format poems in a proper and easy way. It provides some small control tags to allow adjustment to the layout.
 
