@@ -122,7 +122,7 @@ class POEMFORMATTER {
         $align=array_key_exists('align',$atts) ? $atts['align'] : "center";
         $template=array_key_exists('template',$atts) ? $atts['template'] : "default";
             $template=preg_replace("/\W/",'',$template);        # remove all non word characters from template-name
-        if (! in_array('ipsum',$atts)) { $content=POEM_IPSUM; };
+        if (in_array('ipsum',$atts)) { $content=POEM_IPSUM; };
 
         $titlecolor=array_key_exists('titlecolor',$atts) ? 'color:'.$atts['template'].';' : '';
         $textcolor=array_key_exists('textcolor',$atts) ? 'color:'.$atts['textcolor'].';' : '';
