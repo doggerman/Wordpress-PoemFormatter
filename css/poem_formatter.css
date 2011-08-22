@@ -1,0 +1,65 @@
+/*
+Description: Stylesheet for Poem Formatter
+Author: Walter Werther
+Version: 0.1
+*/
+
+/* ----------- GPX2Chart -------------*/
+
+@font-face {
+font-family: 'PecitaBook';
+src: url('http://openfontlibrary.org/assets/fonts/pecita/3fda2eeb6ff7dc73a5f417848cb46af0/afa9f4d8e587118d97498af0231451a2/PecitaBook.otf') format('opentype');
+font-weight: normal;
+font-style: normal;
+}
+
+@font-face {
+font-family: 'IntuitiveRegular';
+src: url('http://openfontlibrary.org/assets/fonts/intuitive/71763f72bef454e1fc6ac6ddc2fd8e7f/bd58d33185009e4b01715d0264d7ac6e/IntuitiveRegular.ttf') format('truetype');
+font-weight: normal;
+font-style: normal;
+} 
+
+
+.poem {
+	margin:auto;
+}
+
+.poem_box {
+	position:relative;
+	opacity:0.75;
+	-moz-opacity:0.75;
+	filter:alpha(opacity=75);
+	background-color: #000000;
+	color:#FFFF00;
+	vertical-align:middle;
+	padding-left:10px;
+	padding-right:10px;
+}
+
+.poem_title {
+	font-family: 'PecitaBook';
+	text-align:center;
+	font-size:40px
+}
+
+.poem_center {
+	font-family: 'IntuitiveRegular';
+	text-align:center;
+	white-space: nowrap;
+}
+
+.poem_right {
+	font-family: 'IntuitiveRegular';
+	text-align:right;
+	white-space: nowrap;
+}
+
+.poem_left {
+	font-family: 'IntuitiveRegular';
+	text-align:left;
+	white-space: nowrap;
+}
+
+.poem_empty {
+}
