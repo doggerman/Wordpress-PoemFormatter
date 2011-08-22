@@ -70,14 +70,14 @@ Yes, I'm sure, that there are some known bugs. I had no time to fix or trace the
 Yes, there is kind of a roadmap. But the order depends on my time.
 
 * improve the documentation
-* add screenshots
 * create some more templates
 
 ## Screenshots ##
 
-1. ![Graph1][screenshot1] not yet available
-2. ![Graph2][screenshot2] also not available yet
-3. ![Graph3][screenshot3] and again
+1. ![Graph1][screenshot1] one column layout
+2. ![Graph2][screenshot2] advanced formatting
+3. ![Graph3][screenshot3] two column layout
+4. ![Graph4][screenshot4] default-layout with advanced format
 
 ## Changelog ##
 
@@ -104,3 +104,4 @@ Initial version
 [screenshot1]: https://github.com/wwerther/Wordpress-PoemFormatter/raw/master/screenshots/screenshot-1.png "Graph1"
 [screenshot2]: https://github.com/wwerther/Wordpress-PoemFormatter/raw/master/screenshots/screenshot-2.png "Graph2"
 [screenshot3]: https://github.com/wwerther/Wordpress-PoemFormatter/raw/master/screenshots/screenshot-3.png "Graph3"
+[screenshot4]: https://github.com/wwerther/Wordpress-PoemFormatter/raw/master/screenshots/screenshot-4.png "Graph4"
