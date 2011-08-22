@@ -4,7 +4,7 @@
 Plugin Name: poem formatter
 # Plugin URI: http://wordpress.org/extend/plugins/gpx2chart/
 Description: poem formatter - a WP-Plugin that allows to format poems properly
-Version: 0.0.1
+Version: 0.0.4
 Author: Walter Werther
 Author URI: http://wwerther.de/
 # Update Server: http://downloads.wordpress.org/plugin
