@@ -62,20 +62,58 @@ class POEMFORMATTER {
         /* 
          * Evaluate optional attributes 
          */
-        $title=array_key_exists('title',$atts) ? $atts['title'] : 'no title';
+        $title=array_key_exists('title',$atts) ? $atts['title'] : null;
+        $author=array_key_exists('author',$atts) ? $atts['author'] : 'Walter Werther';
+        $date=array_key_exists('date',$atts) ? $atts['date'] : ' ';
         $indent=array_key_exists('indent',$atts) ? intval($atts['indent']) : 50;
         $align=array_key_exists('align',$atts) ? $atts['align'] : "center";
 
         /*
          * Preprocess the content
          */
+    
         $content=preg_replace("/<br \/>/","\n",$content);   # Replace linebreaks (html-style) by \n
         $content=strip_tags($content);                      # Remove all HTML-tags
         $content=preg_replace("/^\n+/","",$content);        # Strip all starting and trailing new-lines before the content
         $content=preg_replace("/\n+$/","",$content);
-        $lines=split("\n",$content);                        # Split the text to an array
+
+
+        $content.=<<<EOCONTENT
+
+#2##r#Lorem ipsum dolor sit amet,
+consetetur sadipscing elitr,
+sed diam nonumy eirmod tempor 
+invidunt ut labore et 
+dolore magna aliquyam erat,
+sed diam voluptua. 
+
+At vero eos et accusam et justo 
+duo dolores et ea rebum. Stet clita 
+kasd gubergren, no sea takimata
+sanctus est Lorem ipsum dolor sit amet.
+
+Lorem ipsum dolor sit amet, consetetur 
+sadipscing elitr, sed diam nonumy 
+eirmod tempor invidunt ut labore 
+et dolore magna aliquyam erat, 
+sed diam voluptua. 
+
+At vero eos et accusam et justo 
+duo dolores et ea rebum. Stet clita 
+kasd gubergren, no sea takimata sanctus 
+est 
+
+Lorem ipsum dolor sit amet.
+EOCONTENT;
+
+
+
+$lines=split("\n",$content);                        # Split the text to an array
 
         $linecount=count($lines);                           # Count the lines
+
+
+
 
         $lineheight=intval(430/$linecount);                 # Calculate the lineheight
 
@@ -87,31 +125,49 @@ class POEMFORMATTER {
 #
         $template=<<<EOTEMPLATE
 		<div class="poem" style="background:url(http://wwerther.de/wp-content/gallery/poetry/bg_2.jpg); width:800px; height:532px">
-    		<div class="poem_box poem_title" style="left:20px;top:10px;width:390px;height:50px; line-height:50px; color:#FF0000">{title}</div>
-	    	<div class="poem_box" style="left:20px;top:40px;width:390px;height:430px;line-height:{lineheight}px">
+     		<div class="poem_box poem_title" style="left:20px;top:10px;width:390px;height:50px; line-height:50px; color:#FF0000">{title}</div>
+	    	<div class="poem_box" style="left:20px;top:40px;width:390px;height:430px;line-height:{box1lineheight}px"> <!--box1-->
                 {box1content}
     		</div>
+	    	<div class="poem_box" style="left:480px;top:-390px;width:250px;"> <!--box2-->
+                {box2content}
+    		</div>
+       		<div class="poem_box" style="top:30px;position:relative;padding:0px;right:0px;left:600px; width:200px; color:#FFF">(c) {date} {author}</div>
+
+            
 		</div>
 EOTEMPLATE;
 
 
-        $template=preg_replace('/{box'.$blockno.'content}/',$block,$template);
-
+        if ($title) { $template=preg_replace('/{title}/',$title,$template); }
+        if ($author) { $template=preg_replace('/{author}/',$author,$template); }
+        if ($date) { $template=preg_replace('/{date}/',$date,$template); }
 
         $blockno=1;
         $blockdata=array();
         foreach ($lines as $line) {
             if (preg_match('/#(\d)#/',$line,$matches)) {            # Evaluate the block-number
-                $blockno=$matches[0];
+                $blockno=$matches[1];
                 next;
             }
-            $blockdata[$blockno].=self::render_line($line,$lineheight,$indent);
+            if (! $blockdata[$blockno]) { $blockdata[$blockno]=array(); }
+            array_push($blockdata[$blockno],self::render_line($line,$lineheight,$indent));
         }
 
         foreach ($blockdata as $blockno=>$block) {
             $directcontent.=self::debug("Blockno: $blockno","Next block");
-            $directcontent.=self::debug($block,"data");
-            $template=preg_replace('/{box'.$blockno.'content}/',$block,$template);
+            $blockheight=null;
+            $blocklineheight='';
+            if (preg_match('/height:(\d+)px;.*box'.$blockno.'/',$template,$matches)) {
+                $blockheight=$matches[1];
+                $blockline=count($block);
+                $blocklineheight=intval($blockheight/$blockline);
+            };
+            $data=join("\n",$block);
+            $directcontent.=self::debug("total lines: $linecount\nblock lines:$blockline\n Blockheight: $blockheight\n Blocklineheight: $blocklineheight","Metadata");
+            $directcontent.=self::debug($data,"data");
+            $template=preg_replace('/{box'.$blockno.'lineheight}/',$blocklineheight,$template);
+            $template=preg_replace('/{box'.$blockno.'content}/',$data,$template);
         }
 
         $directcontent.= $template;
@@ -143,7 +199,7 @@ EOTEMPLATE;
         }
 
         if (preg_match("/^$/",$line)) {
-            $style='style="line-height:'.$lineheight.'px"';
+#            $style='style="line-height:'.$lineheight.'px"';
             return '<div class="poem_empty"'.$style.'><br/></div>'."\n";
         } else {
             return '<div class="poem_'.self::$align.'"'.$style.'>'.$line."</div>\n";
