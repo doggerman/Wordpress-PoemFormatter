@@ -19,6 +19,7 @@ if (! defined('POEMFORMATTER_SHORTCODE')) define('POEMFORMATTER_SHORTCODE','poem
 class POEMFORMATTER {
    
     static $debug=1;
+    static $align="center";
 
     static function debug ($text,$headline='') {
        if (self::$debug) {
@@ -96,30 +97,7 @@ EOC;
 #			<div class="poem_left">Zeile4</div>
 
 foreach ($lines as $line) {
-
-    if (preg_match('/#c#/',$line)) {
-        $align="center";
-    } elseif (preg_match('/#r#/',$line)) {
-        $align="right";
-    } elseif (preg_match('/#l#/',$line)) {
-        $align="left";
-    }
-    $line=preg_replace("/#.#/",'',$line);
-
-
-    $add_style='';
-    if (preg_match('/^(\++)/',$line,$matches)) {
-        $style='style="left:'.strlen($matches[0])*$indent.'px"';
-        
-        $line=preg_replace("/^\++/",'',$line);
-    }
-
-    if (preg_match("/^$/",$line)) {
-        $style='style="line-height:'.$lineheight.'px"';
-        $directcontent.= '<div class="poem_empty"'.$style.'><br/></div>'."\n";
-    } else {
-        $directcontent.= '<div class="poem_'.$align.'"'.$style.'>'.$line."</div>\n";
-    }
+        $directcontent.=self::render_line($line,$lineheight,$indent);
 }
 $directcontent.= <<<EOC
 		</div>
@@ -128,6 +106,34 @@ EOC;
 
         return $directcontent;
 
+    }
+
+
+    public static function render_line ($line,$lineheight,$indent) {
+
+        if (preg_match('/#c#/',$line)) {            # Change to center-align
+            self::$align="center";
+        } elseif (preg_match('/#r#/',$line)) {      # Change to right-align
+            self::$align="right";
+        } elseif (preg_match('/#l#/',$line)) {      # Change to left-align
+            self::$align="left";
+        }
+        $line=preg_replace("/#.#/",'',$line);       # Remove all meta-tags from the line
+
+    
+        $add_style='';
+        if (preg_match('/^(\++)/',$line,$matches)) {
+            $style='style="left:'.strlen($matches[0])*$indent.'px"';
+        
+            $line=preg_replace("/^\++/",'',$line);
+        }
+
+        if (preg_match("/^$/",$line)) {
+            $style='style="line-height:'.$lineheight.'px"';
+            return '<div class="poem_empty"'.$style.'><br/></div>'."\n";
+        } else {
+            return '<div class="poem_'.self::$align.'"'.$style.'>'.$line."</div>\n";
+        }
     }
 
 }
