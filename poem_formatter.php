@@ -124,6 +124,9 @@ class POEMFORMATTER {
             $template=preg_replace("/\W/",'',$template);        # remove all non word characters from template-name
         if (! in_array('ipsum',$atts)) { $content=POEM_IPSUM; };
 
+        $titlecolor=array_key_exists('titlecolor',$atts) ? 'color:'.$atts['template'].';' : '';
+        $textcolor=array_key_exists('textcolor',$atts) ? 'color:'.$atts['textcolor'].';' : '';
+
         /*
          * Preprocess the content
          */
@@ -155,6 +158,8 @@ class POEMFORMATTER {
          * Substitue meta-data
          */
         if ($title) { $template=preg_replace('/{title}/',$title,$template); }
+        if ($titlecolor) { $template=preg_replace('/{titlecolor}/',$titlecolor,$template); }
+        if ($textcolor) { $template=preg_replace('/{textcolor}/',$textcolor,$template); }
         if ($author) { $template=preg_replace('/{author}/',$author,$template); }
         if ($date) { $template=preg_replace('/{date}/',$date,$template); }
 
