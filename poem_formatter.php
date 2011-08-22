@@ -16,6 +16,59 @@ Min WP Version: 3.2.0
 
 if (! defined('POEMFORMATTER_SHORTCODE')) define('POEMFORMATTER_SHORTCODE','poem');
 
+# We provide a lorem ipsum text for testing templates.
+if (! defined ('POEM_IPSUM')) define('POEM_IPSUM',<<<EOIPSUM
+Lorem ipsum dolor sit amet,
+consetetur sadipscing elitr,
+sed diam nonumy eirmod tempor 
+invidunt ut labore et 
+dolore magna aliquyam erat,
+sed diam voluptua. 
+
+At vero eos et accusam et justo 
+duo dolores et ea rebum. Stet clita 
+kasd gubergren, no sea takimata
+sanctus est Lorem ipsum dolor sit amet.
+
+Lorem ipsum dolor sit amet, consetetur 
+sadipscing elitr, sed diam nonumy 
+eirmod tempor invidunt ut labore 
+et dolore magna aliquyam erat, 
+sed diam voluptua. 
+
+At vero eos et accusam et justo 
+duo dolores et ea rebum. Stet clita 
+kasd gubergren, no sea takimata sanctus 
+est 
+
+Lorem ipsum dolor sit amet.
+#2##r#Lorem ipsum dolor sit amet,
+consetetur sadipscing elitr,
+sed diam nonumy eirmod tempor 
+invidunt ut labore et 
+dolore magna aliquyam erat,
+sed diam voluptua. 
+
+At vero eos et accusam et justo 
+duo dolores et ea rebum. Stet clita 
+kasd gubergren, no sea takimata
+sanctus est Lorem ipsum dolor sit amet.
+
+Lorem ipsum dolor sit amet, consetetur 
+sadipscing elitr, sed diam nonumy 
+eirmod tempor invidunt ut labore 
+et dolore magna aliquyam erat, 
+sed diam voluptua. 
+
+At vero eos et accusam et justo 
+duo dolores et ea rebum. Stet clita 
+kasd gubergren, no sea takimata sanctus 
+est 
+
+Lorem ipsum dolor sit amet.
+EOIPSUM
+);
+
 class POEMFORMATTER {
    
     static $debug=1;
@@ -54,7 +107,7 @@ class POEMFORMATTER {
         // $atts    ::= array of attributes
         // $content ::= text within enclosing form of shortcode element
         // $code    ::= the shortcode found, when == callback name
-        //           [gpx2chart href="<GPX-Source>" (maxelem="51") (debug) (width="90%") (metadata="heartrate cadence distance speed") (display="heartrate cadence elevation speed")]
+        //           [poem title="<title>" author="<author>" date="<date>" indent="<pixel>" align="center|left|right" template="<template>" debug ipsum ] CONTENT [/poem]
 
         /* Check if we are in "debug mode". Create a more verbose output then */
         self::$debug=self::$debug ? self::$debug : in_array('debug',$atts);
@@ -63,86 +116,51 @@ class POEMFORMATTER {
          * Evaluate optional attributes 
          */
         $title=array_key_exists('title',$atts) ? $atts['title'] : null;
-        $author=array_key_exists('author',$atts) ? $atts['author'] : 'Walter Werther';
+        $author=array_key_exists('author',$atts) ? $atts['author'] : ' ';
         $date=array_key_exists('date',$atts) ? $atts['date'] : ' ';
         $indent=array_key_exists('indent',$atts) ? intval($atts['indent']) : 50;
         $align=array_key_exists('align',$atts) ? $atts['align'] : "center";
+        $template=array_key_exists('template',$atts) ? $atts['template'] : "default";
+            $template=preg_replace("/\W/",'',$template);        # remove all non word characters from template-name
+        if (! in_array('ipsum',$atts)) { $content=POEM_IPSUM; };
 
         /*
          * Preprocess the content
          */
-    
         $content=preg_replace("/<br \/>/","\n",$content);   # Replace linebreaks (html-style) by \n
         $content=strip_tags($content);                      # Remove all HTML-tags
         $content=preg_replace("/^\n+/","",$content);        # Strip all starting and trailing new-lines before the content
         $content=preg_replace("/\n+$/","",$content);
-
-
-        $content.=<<<EOCONTENT
-
-#2##r#Lorem ipsum dolor sit amet,
-consetetur sadipscing elitr,
-sed diam nonumy eirmod tempor 
-invidunt ut labore et 
-dolore magna aliquyam erat,
-sed diam voluptua. 
-
-At vero eos et accusam et justo 
-duo dolores et ea rebum. Stet clita 
-kasd gubergren, no sea takimata
-sanctus est Lorem ipsum dolor sit amet.
-
-Lorem ipsum dolor sit amet, consetetur 
-sadipscing elitr, sed diam nonumy 
-eirmod tempor invidunt ut labore 
-et dolore magna aliquyam erat, 
-sed diam voluptua. 
-
-At vero eos et accusam et justo 
-duo dolores et ea rebum. Stet clita 
-kasd gubergren, no sea takimata sanctus 
-est 
-
-Lorem ipsum dolor sit amet.
-EOCONTENT;
-
-
-
-$lines=split("\n",$content);                        # Split the text to an array
+        $lines=split("\n",$content);                        # Split the text to an array
 
         $linecount=count($lines);                           # Count the lines
 
-
-
-
-        $lineheight=intval(430/$linecount);                 # Calculate the lineheight
-
+        /*
+         * Add some debug information
+         */
         $directcontent.=self::debug(var_export ($atts,true),"Attributes");
         $directcontent.=self::debug($content,"Content");
         $directcontent.=self::debug("Count:$linecount Height:$lineheight","Lines");
 
-#        include (dirname(__FILE__)."/templates/bg_1.php");
-#
-        $template=<<<EOTEMPLATE
-		<div class="poem" style="background:url(http://wwerther.de/wp-content/gallery/poetry/bg_2.jpg); width:800px; height:532px">
-     		<div class="poem_box poem_title" style="left:20px;top:10px;width:390px;height:50px; line-height:50px; color:#FF0000">{title}</div>
-	    	<div class="poem_box" style="left:20px;top:40px;width:390px;height:430px;line-height:{box1lineheight}px"> <!--box1-->
-                {box1content}
-    		</div>
-	    	<div class="poem_box" style="left:480px;top:-390px;width:250px;"> <!--box2-->
-                {box2content}
-    		</div>
-       		<div class="poem_box" style="top:30px;position:relative;padding:0px;right:0px;left:600px; width:200px; color:#FFF">(c) {date} {author}</div>
+        /*
+         * Try to load the template
+         */
+        if (file_exists(dirname(__FILE__)."/templates/$template.tmpl")) {
+            $template=file_get_contents(dirname(__FILE__)."/templates/$template.tmpl");
+        } else {
+            return "POEM-Formatter-Error: Template '$template' does not exist";
+        }
 
-            
-		</div>
-EOTEMPLATE;
-
-
+        /*
+         * Substitue meta-data
+         */
         if ($title) { $template=preg_replace('/{title}/',$title,$template); }
         if ($author) { $template=preg_replace('/{author}/',$author,$template); }
         if ($date) { $template=preg_replace('/{date}/',$date,$template); }
 
+        /*
+         * Parse block by block (default block is 1)
+         */
         $blockno=1;
         $blockdata=array();
         foreach ($lines as $line) {
@@ -154,20 +172,30 @@ EOTEMPLATE;
             array_push($blockdata[$blockno],self::render_line($line,$lineheight,$indent));
         }
 
+        /*
+         * And now render each block to the template
+         */
         foreach ($blockdata as $blockno=>$block) {
+            // Debug information
             $directcontent.=self::debug("Blockno: $blockno","Next block");
+
             $blockheight=null;
             $blocklineheight='';
+            $blockemptylineheight=$blocklineheight;
             if (preg_match('/height:(\d+)px;.*box'.$blockno.'/',$template,$matches)) {
                 $blockheight=$matches[1];
                 $blockline=count($block);
                 $blocklineheight=intval($blockheight/$blockline);
+                $blockemptylineheight=$blocklineheight;
             };
+
             $data=join("\n",$block);
             $directcontent.=self::debug("total lines: $linecount\nblock lines:$blockline\n Blockheight: $blockheight\n Blocklineheight: $blocklineheight","Metadata");
             $directcontent.=self::debug($data,"data");
-            $template=preg_replace('/{box'.$blockno.'lineheight}/',$blocklineheight,$template);
             $template=preg_replace('/{box'.$blockno.'content}/',$data,$template);
+
+            $template=preg_replace('/{box'.$blockno.'lineheight}/',$blocklineheight,$template);
+            $template=preg_replace('/{emptylineheight}/',$blockemptylineheight,$template);
         }
 
         $directcontent.= $template;
@@ -175,11 +203,7 @@ EOTEMPLATE;
 
     }
 
-    public static function render_box () {
-    }
-
-
-    public static function render_line ($line,$lineheight,$indent) {
+    public static function render_line ($line,$indent,$enableempty=false) {
 
         if (preg_match('/#c#/',$line)) {            # Change to center-align
             self::$align="center";
@@ -194,15 +218,15 @@ EOTEMPLATE;
         $add_style='';
         if (preg_match('/^(\++)/',$line,$matches)) {
             $style='style="left:'.strlen($matches[0])*$indent.'px"';
-        
             $line=preg_replace("/^\++/",'',$line);
         }
 
         if (preg_match("/^$/",$line)) {
-#            $style='style="line-height:'.$lineheight.'px"';
-            return '<div class="poem_empty"'.$style.'><br/></div>'."\n";
+            $style='';
+            if ($enableempty) { $style='style="line-height:{emptylineheight}px" '; }
+            return '<div class="poem_empty" '.$style.'><br/></div>';
         } else {
-            return '<div class="poem_'.self::$align.'"'.$style.'>'.$line."</div>\n";
+            return '<div class="poem_'.self::$align.'"'.$style.'>'.$line.'</div>';
         }
     }
 
