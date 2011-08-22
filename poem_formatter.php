@@ -124,8 +124,8 @@ class POEMFORMATTER {
             $template=preg_replace("/\W/",'',$template);        # remove all non word characters from template-name
         if (in_array('ipsum',$atts)) { $content=POEM_IPSUM; };
 
-        $titlecolor=array_key_exists('titlecolor',$atts) ? 'color:'.$atts['template'].';' : '';
-        $textcolor=array_key_exists('textcolor',$atts) ? 'color:'.$atts['textcolor'].';' : '';
+        $titlecolor=array_key_exists('titlecolor',$atts) ? 'color:'.$atts['template'].';' : ' ';
+        $textcolor=array_key_exists('textcolor',$atts) ? 'color:'.$atts['textcolor'].';' : ' ';
 
         /*
          * Preprocess the content
@@ -174,7 +174,7 @@ class POEMFORMATTER {
                 next;
             }
             if (! $blockdata[$blockno]) { $blockdata[$blockno]=array(); }
-            array_push($blockdata[$blockno],self::render_line($line,$lineheight,$indent));
+            array_push($blockdata[$blockno],self::render_line($line,$indent,false));
         }
 
         /*
@@ -222,7 +222,7 @@ class POEMFORMATTER {
     
         $add_style='';
         if (preg_match('/^(\++)/',$line,$matches)) {
-            $style='style="left:'.strlen($matches[0])*$indent.'px"';
+            $style='style="margin-'.self::$align.':'.strlen($matches[0])*$indent.'px"';
             $line=preg_replace("/^\++/",'',$line);
         }
 

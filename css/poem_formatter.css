@@ -23,19 +23,27 @@ font-style: normal;
 
 
 .poem {
-	margin:auto;
+    padding:0px;
+    padding-top:10px;
+    padding-bottom:10px;
 }
 
 .poem_box {
 	position:relative;
+    right:0px;
+    bottom:0px;
 	opacity:0.75;
 	-moz-opacity:0.75;
 	filter:alpha(opacity=75);
+	font-family: 'IntuitiveRegular';
 	background-color: #000000;
 	color:#FFFF00;
 	vertical-align:middle;
+    padding-top:0px;
+    padding-bottom:0px;
 	padding-left:10px;
 	padding-right:10px;
+	white-space: nowrap;
 }
 
 .poem_title { 
@@ -46,21 +54,15 @@ font-style: normal;
 }
 
 .poem_center {
-	font-family: 'IntuitiveRegular';
 	text-align:center;
-	white-space: nowrap;
 }
 
 .poem_right {
-	font-family: 'IntuitiveRegular';
 	text-align:right;
-	white-space: nowrap;
 }
 
 .poem_left {
-	font-family: 'IntuitiveRegular';
 	text-align:left;
-	white-space: nowrap;
 }
 
 .poem_empty {
