@@ -84,28 +84,42 @@ class POEMFORMATTER {
         $directcontent.=self::debug("Count:$linecount Height:$lineheight","Lines");
 
 #        include (dirname(__FILE__)."/templates/bg_1.php");
-
-$directcontent.= <<<EOC
+#
+        $template=<<<EOTEMPLATE
 		<div class="poem" style="background:url(http://wwerther.de/wp-content/gallery/poetry/bg_2.jpg); width:800px; height:532px">
-		<div class="poem_box poem_title" style="left:20px;top:10px;width:390px;height:50px; line-height:50px; color:#FF0000">$title</div>
-		<div class="poem_box" style="left:20px;top:40px;width:390px;height:430px;line-height:${lineheight}px">
-EOC;
-#			<div class="poem_left">Zeile1</div>
-#			<div class="poem_left" style="margin-left:50px">Zeile2</div>
-#			<div class="poem_empty"><br/></div>
-#			<div class="poem_right">Zeile3</div>
-#			<div class="poem_left">Zeile4</div>
-
-foreach ($lines as $line) {
-        $directcontent.=self::render_line($line,$lineheight,$indent);
-}
-$directcontent.= <<<EOC
+    		<div class="poem_box poem_title" style="left:20px;top:10px;width:390px;height:50px; line-height:50px; color:#FF0000">{title}</div>
+	    	<div class="poem_box" style="left:20px;top:40px;width:390px;height:430px;line-height:{lineheight}px">
+                {box1content}
+    		</div>
 		</div>
-		</div>
-EOC;
+EOTEMPLATE;
 
+
+        $template=preg_replace('/{box'.$blockno.'content}/',$block,$template);
+
+
+        $blockno=1;
+        $blockdata=array();
+        foreach ($lines as $line) {
+            if (preg_match('/#(\d)#/',$line,$matches)) {            # Evaluate the block-number
+                $blockno=$matches[0];
+                next;
+            }
+            $blockdata[$blockno].=self::render_line($line,$lineheight,$indent);
+        }
+
+        foreach ($blockdata as $blockno=>$block) {
+            $directcontent.=self::debug("Blockno: $blockno","Next block");
+            $directcontent.=self::debug($block,"data");
+            $template=preg_replace('/{box'.$blockno.'content}/',$block,$template);
+        }
+
+        $directcontent.= $template;
         return $directcontent;
 
+    }
+
+    public static function render_box () {
     }
 
 
