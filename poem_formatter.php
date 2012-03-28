@@ -1,16 +1,18 @@
 <?php
-// vim: set ts=4 et nu ai syntax=php indentexpr= ff=unix :vim
+// vim: set ts=4 et nu ai syntax=php indentexpr= ff=unix sw=2 :vim
 /*
 Plugin Name: poem formatter
-# Plugin URI: http://wordpress.org/extend/plugins/gpx2chart/
-Description: poem formatter - a WP-Plugin that allows to format poems properly
-Version: 0.0.6
+Plugin URI: http://wwerther.de/static/poemformatter
+Description: poem formatter - a WP-Plugin that allows to format poems properly. Samples can be found on <a href="http://wwerther.de/static/poemformatter">Poem formatter plugin page</a>.
+Version: 0.1.0
 Author: Walter Werther
 Author URI: http://wwerther.de/
-# Update Server: http://downloads.wordpress.org/plugin
-Min WP Version: 3.2.0
+Update Server: http://downloads.wordpress.org/plugin
+Min WP Version: 3.1.2
+Max WP Version: 3.3.1
  */
 
+define ('POEMFORMATTER_PLUGIN_VER','0.1.0');
 
 /* require_once(dirname(__FILE__).'/ww_gpx.php'); */
 
@@ -82,7 +84,8 @@ class POEMFORMATTER {
     }
  
 	public static function init() {
-		add_shortcode(POEMFORMATTER_SHORTCODE, array(__CLASS__, 'handle_shortcode'));
+        add_action('admin_menu', array(__CLASS__, 'admin_menu'));
+        add_shortcode(POEMFORMATTER_SHORTCODE, array(__CLASS__, 'handle_shortcode'));
 
         if (self::$debug) {
 #            wp_register_script('excanvas', plugins_url('/js/flot/excanvas.js',__FILE__), array('jquery'), '2.1.4', false);
@@ -93,10 +96,20 @@ class POEMFORMATTER {
         wp_enqueue_style('POEMFORMATTER2', plugins_url('poem_formatter/css/poem_formatter.css'), false, '1.0.0', 'screen');
 	}
 
+    public static function admin_menu($not_used) {
+        add_options_page(__('Poemformatter Settings',POEMFORMATTER_TEXTDOMAIN), __('Poemformatter',POEMFORMATTER_TEXTDOMAIN), 'manage_options', basename(__FILE__), array('POEMFORMATTER', 'options_page_poem'));
+    }
 
 	public static function formattime($value) {
             return strftime('%H:%M:%S',$value);
 	}
+
+    public static function options_page_poem() {
+        if(isset($_POST['Options'])){
+        } else {
+        };
+       include('poemformatter_options.php');   
+    }
 
 /*
  * Our shortcode-Handler for Poems
@@ -269,4 +282,15 @@ if (! function_exists('add_shortcode')) {
 
 POEMFORMATTER::init();
 
+
+
+function wp_poemformatter_plugin_actions( $links, $file ) {
+    if( $file == 'poem_formatter/poem_formatter.php' && function_exists( "admin_url" ) ) {
+        $settings_link = '<a href="' . admin_url( 'options-general.php?page=poem_formatter' ) . '">' . __('Settings') . '</a>';
+        array_unshift( $links, $settings_link ); // before other links
+    }
+    return $links;
+}
+
+add_filter( 'plugin_action_links', 'wp_poemformatter_plugin_actions', 10, 2 )
 ?>

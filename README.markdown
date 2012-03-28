@@ -1,11 +1,11 @@
 # PoemFormatter #
 
 Contributors: wwerther
-Donate link: http://wwerther.de/
-Tags: poem, formatter
+Donate link: http://wwerther.de/static/poemformatter
+Tags: poem, format, lyrics, poetry
 Requires at least: 3.2
-Tested up to: 3.2.2
-Stable tag: 0.0.6
+Tested up to: 3.3.1
+Stable tag: 0.1.0
 
 A plugin that allows to format poems in a proper and easy way. It provides some small control tags to allow adjustment to the layout.
 
@@ -81,6 +81,9 @@ Yes, there is kind of a roadmap. But the order depends on my time.
 
 ## Changelog ##
 
+### 0.1.0 ###
+* only minor adjustments. Preparation for further changes
+
 ### 0.0.6 ###
 
 * support for different templates and text-blocks
@@ -89,17 +92,19 @@ Yes, there is kind of a roadmap. But the order depends on my time.
 
 ### 0.0.1 ###
 
-Initial pre-beta version, does not really allow public usage
+* Initial pre-beta version, does not really allow public usage
 
 ## Upgrade Notice ##
 
-### 0.0.6 ###
+### 0.1.0 ###
+* Smaller bugfixes, updated some URLs
 
-We almost reach the level where it is worth to use this plugin
+### 0.0.6 ###
+* We almost reach the level where it is worth to use this plugin
 
 ### 0.0.1 ###
 
-Initial version
+* Initial version
 
 [screenshot1]: https://github.com/wwerther/Wordpress-PoemFormatter/raw/master/screenshots/screenshot-1.png "Graph1"
 [screenshot2]: https://github.com/wwerther/Wordpress-PoemFormatter/raw/master/screenshots/screenshot-2.png "Graph2"
